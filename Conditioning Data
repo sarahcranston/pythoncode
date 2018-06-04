@@ -99,7 +99,8 @@ A
   mean   3.000000  2.800000
   std    1.581139  1.788854
   min    1.000000  1.000000
-  25%    2.000000  1.000000
+
+25%    2.000000  1.000000
   50%    3.000000  3.000000
   75%    4.000000  4.000000
   max    5.000000  5.000000
@@ -157,3 +158,15 @@ print unstacked.loc[:,(slice(None),['count', 'mean']),]
 A                          
 0      5   3.0      5   2.8
 1      2   3.5      2   2.5
+
+#formatting Date and Time Values
+import datetime as dt
+#create datetime object and convert it to a string
+now = dt.datetime.now()
+
+print str(now)
+#convert into a more usable format
+print now.strftime ('%a, %d %B %Y')
+
+2018-06-03 20:11:17.045000
+Sun, 03 June 2018
