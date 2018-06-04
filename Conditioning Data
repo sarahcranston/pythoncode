@@ -100,6 +100,7 @@ A
   std    1.581139  1.788854
   min    1.000000  1.000000
 
+
 25%    2.000000  1.000000
   50%    3.000000  3.000000
   75%    4.000000  4.000000
@@ -170,3 +171,40 @@ print now.strftime ('%a, %d %B %Y')
 
 2018-06-03 20:11:17.045000
 Sun, 03 June 2018
+
+#adding new cases and variables
+
+import pandas as pd
+
+df = pd.DataFrame({'A': [2,3,1],
+                   'B': [1,2,3],
+                   'C': [5,3,4]})
+
+df1 = pd.ataFram({'A': [4],
+                  'B': [4],
+                  'C': [4]})
+
+df = df.append(df1)
+df = df.reset_index(drop=True)
+print df
+
+df.loc[df.last_valid_index() +1] = [5, 5, 5]
+print
+print df
+
+df2 = pd.DataFrame({'D': [1, 2, 3, 4, 5]})
+
+df = pd.DataFrame.join(df, df2)
+print
+print df
+
+#Data Aggregation provides a map to make things anonymous such as credit card informationi
+import pandas as pd
+
+df = pd.DataFrame ({'Map': [0,0,0,1,1,2,2],
+                  'Values': {1,2,3,5,4,2,5]})
+df['S'] = df.groupby('Map')['Values'].transform(np.sum)
+df['M'] = df.groupby('Map')['Values'].transform(np.mean)
+df['V] = df.groupby('Map'['Values'}.transform(np.var)
+
+print df
