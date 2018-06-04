@@ -1,1 +1,159 @@
+from lxml import objectify 
+import pandas as pd
 
+xml = objectify.parse(open('XMLData2.xml'))  #importing dataset with duplicate
+root = xml.getroot()
+df = pd.DataFrame(columns =('Number', 'String', 'Boolean')) #define dataframe
+
+for i in range (0,4):
+    obj = root.getchildren()[i].getchildren()
+    row = dict(zip(['Number', 'String', 'Boolean'],
+                   [obj[0].text, obj[1].text,
+                    obj[2].text]))
+    row_s = pd.Series(row)
+    row_s.name = i
+    df = df.append(row_s)
+    
+    search = pd.DataFrame.duplicated(df)
+    print df
+    print
+    print search [search == True]
+                            
+Number String Boolean
+0      1  First    True
+
+Series([], dtype: bool)
+  Number  String Boolean
+0      1   First    True
+1      2  Second   False
+
+Series([], dtype: bool)
+  Number  String Boolean
+0      1   First    True
+1      2  Second   False
+2      3   Third    True
+
+Series([], dtype: bool)
+  Number  String Boolean
+0      1   First    True
+1      2  Second   False
+2      3   Third    True
+3      3   Third    True
+
+3    True
+dtype: bool
+In [7]:
+
+#Removing Duplicates
+from lxml import objectify
+import pandas as pd
+ 
+xml = objectify.parse(open('XMLData2.xml'))
+root = xml.getroot()
+df = pd.DataFrame(columns=('Number', 'String', 'Boolean'))  
+for i in range(0,4):
+    obj=root.getchildren()[i].getchildren()
+    row =dict(zip(['Number', 'String', 'Boolean'],
+                [obj[0].text, obj[1].text,
+                obj[2].text]))
+    row_s = pd.Series(row)
+    row_s.name = i
+    df = df.append(row_s)
+    print df.drop_duplicates()
+    
+ 
+    
+
+
+
+  Number String Boolean
+0      1  First    True
+  Number  String Boolean
+0      1   First    True
+1      2  Second   False
+  Number  String Boolean
+0      1   First    True
+1      2  Second   False
+2      3   Third    True
+  Number  String Boolean
+0      1   First    True
+1      2  Second   False
+2      3   Third    True
+In [10]:
+
+#Creating a Dat map and data plan
+import pandas as pd
+df = pd.DataFrame ({'A': [0,0,0,0,0,1,1],
+                    'B': [1,2,3,5,4,2,5],
+                    'C': [5,3,4,1,1,2,3]})
+ 
+a_group_desc = df.groupby('A').describe()
+print a_group_desc
+ 
+
+
+
+                B         C
+A                          
+0 count  5.000000  5.000000
+  mean   3.000000  2.800000
+  std    1.581139  1.788854
+  min    1.000000  1.000000
+  25%    2.000000  1.000000
+  50%    3.000000  3.000000
+  75%    4.000000  4.000000
+  max    5.000000  5.000000
+1 count  2.000000  2.000000
+  mean   3.500000  2.500000
+  std    2.121320  0.707107
+  min    2.000000  2.000000
+  25%    2.750000  2.250000
+  50%    3.500000  2.500000
+  75%    4.250000  2.750000
+  max    5.000000  3.000000
+In [13]:
+
+# break apart the data for better readability
+import pandas as pd
+df = pd.DataFrame ({'A': [0,0,0,0,0,1,1],
+                    'B': [1,2,3,5,4,2,5],
+                    'C': [5,3,4,1,1,2,3]})
+ 
+a_group_desc = df.groupby('A').describe()
+ 
+unstacked = a_group_desc.unstack()
+print unstacked
+
+
+
+       B                                                 C                  \
+   count  mean       std  min   25%  50%   75%  max  count  mean       std   
+A                                                                            
+0      5   3.0  1.581139    1  2.00  3.0  4.00    5      5   2.8  1.788854   
+1      2   3.5  2.121320    2  2.75  3.5  4.25    5      2   2.5  0.707107   
+
+                              
+   min   25%  50%   75%  max  
+A                             
+0    1  1.00  3.0  4.00    5  
+1    2  2.25  2.5  2.75    3  
+In [14]:
+
+#Reduce amount of data provided: number of items in each series and their mean
+import pandas as pd
+df = pd.DataFrame ({'A': [0,0,0,0,0,1,1],
+                    'B': [1,2,3,5,4,2,5],
+                    'C': [5,3,4,1,1,2,3]})
+ 
+a_group_desc = df.groupby('A').describe()
+ 
+unstacked = a_group_desc.unstack()
+print unstacked.loc[:,(slice(None),['count', 'mean']),]
+
+
+
+       B            C      
+   count  mean  count  mean
+A                          
+0      5   3.0      5   2.8
+1      2   3.5      2   2.5
